@@ -1,0 +1,27 @@
+{
+	"type": "module",
+	"scripts": {
+		"dev": "docker compose up --build -d && vite dev && docker compose down",
+		"build": "docker compose up --build -d && vite build && docker compose down",
+		"test": "vitest"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^7.5.0",
+		"@typescript-eslint/parser": "^7.5.0",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-config-xo": "^0.44.0",
+		"eslint-config-xo-typescript": "^4.0.0",
+		"eslint-plugin-only-warn": "^1.1.0",
+		"eslint-plugin-prettier": "^5.1.3",
+		"prettier": "^3.2.5",
+		"prettier-plugin-jsdoc": "^1.3.0",
+		"ts-node": "^10.9.2",
+		"typescript": "5.4",
+		"vite": "^5.2.8",
+		"vitest": "^1.4.0"
+	},
+	"dependencies": {}
+}
+

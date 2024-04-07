@@ -1,0 +1,80 @@
+services:
+    db:
+        image: mariadb:11.3.2
+        ports:
+            - 3306:3306
+        restart: unless-stopped
+        volumes:
+            - ./.db:/var/lib/mysql
+        env_file:
+            - .env
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    wordpress:
+        image: wordpress:6.5.0-php8.3-fpm-alpine
+        depends_on:
+            - db
+        restart: unless-stopped
+        volumes:
+            - ./config/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+            - wordpress:/var/www/html
+            - ./wp-content:/var/www/html/wp-content
+        env_file:
+            - .env
+        environment:
+            WORDPRESS_DB_HOST: db
+            WORDPRESS_DB_NAME: wordpress
+            WORDPRESS_DB_USER: ${MYSQL_USER}
+            WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:5.2.1-fpm-alpine
+        depends_on:
+            - db
+        restart: unless-stopped
+        volumes:
+            - phpmyadmin:/var/www/html
+        env_file:
+            - .env
+        environment:
+            PMA_HOST: db
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    webserver:
+        image: nginx:1.25.4-alpine
+        depends_on:
+            - wordpress
+        restart: unless-stopped
+        volumes:
+            - ./config/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+            - ./config/nginx/snippets:/etc/nginx/snippets
+            - wordpress:/var/www/html
+            - phpmyadmin:/var/www/html/phpmyadmin
+        env_file:
+            - .env
+        environment:
+            ERROR_LOG: stdout
+            ACCESS_LOG: stderr
+    ssl:
+        image: steveltn/https-portal:1.23.1
+        depends_on:
+            - webserver
+        ports:
+            - 80:80
+            - 443:443
+        restart: unless-stopped
+        volumes:
+            - ./.ssl:/var/lib/https-portal
+        env_file:
+            - .env
+        environment:
+            # DOMAINS: 'example.com -> http://webserver:80 #production'
+            # DOMAINS: 'staging.example.com -> http://webserver:80 #staging'
+            DOMAINS: 'localhost -> http://webserver:80 #local'
+            # allow larger file uploads
+            CLIENT_MAX_BODY_SIZE: 64M
+
+volumes:
+    phpmyadmin:
+    wordpress:

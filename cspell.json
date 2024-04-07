@@ -1,0 +1,32 @@
+{
+	"version": "0.2",
+	"language": "en",
+	"ignorePaths": [
+		"node_modules/**/*",
+		"patches/**/*",
+		".cspell/**/*",
+		"**/package.json"
+	],
+	"dictionaries": ["variables", "modules", "brand"],
+	"dictionaryDefinitions": [
+		{
+			"name": "variables",
+			"path": ".cspell/variables.txt"
+		},
+		{
+			"name": "modules",
+			"path": ".cspell/modules.txt"
+		},
+		{
+			"name": "brand",
+			"path": ".cspell/brand.txt"
+		}
+	],
+	"patterns": [
+		{
+			"name": "import",
+			"pattern": "import\\s+.*\\s+from\\s+['\"].*['\"]"
+		}
+	],
+	"ignoreRegExpList": ["import"]
+}

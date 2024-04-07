@@ -1,0 +1,30 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	root /var/www/html;
+	index index.php;
+
+	# allow larger file uploads
+	client_max_body_size 64M;
+
+	location / {
+		try_files $uri $uri/ /index.php?$args;
+	}
+
+	location ~ ^/phpmyadmin(.+\.php)$ {
+		alias /var/www/html;
+		index index.php;
+		include fastcgi_params;
+		include snippets/fastcgi-php.conf;
+		# rewrite /phpmyadmin/$1 -> /$1
+		fastcgi_param SCRIPT_FILENAME $document_root$1;
+		fastcgi_pass phpmyadmin:9000;
+	}
+
+	location ~ \.php$ {
+		include fastcgi_params;
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass wordpress:9000;
+	}
+}
