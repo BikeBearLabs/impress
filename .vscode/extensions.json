@@ -12,6 +12,7 @@
 		"raczzalan.webgl-glsl-editor",
 		"jock.svg",
 		"ahmadalli.vscode-nginx-conf",
-		"xaver.clang-format"
+		"xaver.clang-format",
+		"bmewburn.vscode-intelephense-client"
 	]
 }
