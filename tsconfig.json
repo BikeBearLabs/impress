@@ -7,8 +7,9 @@
 		"src/**/*",
 		"tests/**/*",
 		"**/*.config.*",
-		"**/*.rc*",
-		".eslintrc.cjs"
+		"**/.*rc.*",
+		".next/types/**/*.ts",
+		"next-env.d.ts"
 	],
 	"exclude": ["node_modules", "dist"],
 	"compilerOptions": {
@@ -42,6 +43,12 @@
 		"noUncheckedIndexedAccess": true,
 		"allowJs": true,
 		"checkJs": true,
-		"jsx": "preserve"
+		"jsx": "preserve",
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
 	}
 }

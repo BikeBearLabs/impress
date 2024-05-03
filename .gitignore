@@ -2,5 +2,7 @@ node_modules/
 logs/
 .ssl/
 .db/
+dist/
+.next/
 *.env*
 !*.env.example

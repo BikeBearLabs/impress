@@ -4,7 +4,7 @@ module.exports = {
 	tabWidth: 4,
 	singleQuote: true,
 	jsxSingleQuote: true,
-	endOfLine: 'crlf',
+	endOfLine: 'lf',
 	singleAttributePerLine: true,
 	plugins: ['prettier-plugin-jsdoc'],
 };

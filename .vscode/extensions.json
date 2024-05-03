@@ -6,6 +6,12 @@
 		"stylelint.vscode-stylelint",
 		"ronilaukkarinen.vscode-stylefmt",
 		"esbenp.prettier-vscode",
-		"ahmadalli.vscode-nginx-conf"
+		"github.vscode-github-actions",
+		"streetsidesoftware.code-spell-checker",
+		"bradlc.vscode-tailwindcss",
+		"raczzalan.webgl-glsl-editor",
+		"jock.svg",
+		"ahmadalli.vscode-nginx-conf",
+		"xaver.clang-format"
 	]
 }

@@ -10,6 +10,7 @@ const rulesCommon = {
 	'no-labels': 'off',
 	'no-unused-labels': 'off',
 	'no-extra-label': 'off',
+	'no-unused-vars': 'off',
 	'no-eq-null': 'off',
 	eqeqeq: ['error', 'always', { null: 'ignore' }],
 	'@typescript-eslint/class-literal-property-style': ['error', 'fields'],
@@ -68,6 +69,11 @@ const rulesCommon = {
 						'Use Uint8Array instead. See: https://sindresorhus.com/blog/goodbye-nodejs-buffer',
 					suggest: ['Uint8Array'],
 				},
+				'[]': "Don't use the empty array type `[]`. It only allows empty arrays. Use `SomeType[]` instead.",
+				'[[]]': "Don't use `[[]]`. It only allows an array with a single element which is an empty array. Use `SomeType[][]` instead.",
+				'[[[]]]': "Don't use `[[[]]]`. Use `SomeType[][][]` instead.",
+				'[[[[]]]]': 'ur drunk 🤡',
+				'[[[[[]]]]]': '🦄💥',
 			},
 		},
 	],
@@ -84,7 +90,17 @@ const rulesCommon = {
 			leadingUnderscore: 'forbid',
 			trailingUnderscore: 'forbid',
 			filter: {
-				regex: '[- ]',
+				regex: '(^\\d)|[^\\w$]',
+				match: false,
+			},
+		},
+		{
+			selector: ['function'],
+			format: ['strictCamelCase', 'StrictPascalCase'],
+			leadingUnderscore: 'forbid',
+			trailingUnderscore: 'forbid',
+			filter: {
+				regex: '(^\\d)|[^\\w$]',
 				match: false,
 			},
 		},
@@ -100,7 +116,7 @@ const rulesCommon = {
 			leadingUnderscore: 'forbid',
 			trailingUnderscore: 'forbid',
 			filter: {
-				regex: '[- ]',
+				regex: '(^\\d)|[^\\w$]',
 				match: false,
 			},
 		},
@@ -135,7 +151,6 @@ const rulesCommon = {
 	],
 	'capitalized-comments': 'off',
 	'@typescript-eslint/no-redeclare': 'off', // not recommended for new projects any more
-	'no-bitwise': 'off',
 };
 const rulesTs = { ...rulesCommon };
 const rulesJs = {
@@ -146,16 +161,23 @@ const rulesJs = {
 	),
 };
 
+/** @type {import('eslint').Linter.Config} */
 module.exports = {
 	overrides: [
 		{
-			files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
-			extends: ['xo', 'prettier', 'plugin:prettier/recommended'],
+			files: ['**/*.?(m|c)js?(x)'],
+			extends: [
+				'next/core-web-vitals',
+				'xo',
+				'prettier',
+				'plugin:prettier/recommended',
+			],
 			rules: rulesJs,
 		},
 		{
-			files: ['**/*.ts', '**/*.cts', '**/*.mts'],
+			files: ['**/*.?(m|c)ts?(x)'],
 			extends: [
+				'next/core-web-vitals',
 				'xo',
 				'xo-typescript',
 				'prettier',

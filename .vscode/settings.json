@@ -1,4 +1,10 @@
 {
+	"[tailwindcss]": {
+		"editor.defaultFormatter": "stylelint.vscode-stylelint"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "stylelint.vscode-stylelint"
+	},
 	"[postcss]": {
 		"editor.defaultFormatter": "stylelint.vscode-stylelint"
 	},
@@ -23,6 +29,9 @@
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 	},
+	"[glsl]": {
+		"editor.defaultFormatter": "xaver.clang-format"
+	},
 	"editor.colorDecorators": true,
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"editor.formatOnSave": true,
@@ -32,5 +41,15 @@
 	"typescript.preferences.importModuleSpecifierEnding": "minimal",
 	"typescript.preferences.importModuleSpecifier": "shortest",
 	"task.allowAutomaticTasks": "on",
-	"testing.automaticallyOpenPeekView": "never"
+	"testing.automaticallyOpenPeekView": "never",
+	"stylelint.validate": ["css", "less", "postcss", "tailwindcss"],
+	"files.eol": "\n",
+	"files.associations": {
+		"*.pcss": "tailwindcss"
+	},
+	"tailwindCSS.experimental.classRegex": [
+		"tw`([^`]*)", // tw`...`
+		"class?\\s*=\\s*\"([^\"]*)" // class="..."
+	],
+	"clang-format.executable": "${workspaceRoot}/node_modules/.bin/clang-format"
 }

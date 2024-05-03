@@ -29,6 +29,21 @@ services:
             WORDPRESS_DB_NAME: wordpress
             WORDPRESS_DB_USER: ${MYSQL_USER}
             WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+    app:
+        image: node:22.0.0-alpine
+        user: node
+        depends_on:
+            - wordpress
+        restart: unless-stopped
+        working_dir: /home/node/app
+        volumes:
+            - ./dist:/home/node/app/dist
+        environment:
+            NODE_ENV: production
+        env_file:
+            - .env
+        init: true
+        command: node dist/server.js
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:5.2.1-fpm-alpine
         depends_on:
@@ -45,12 +60,13 @@ services:
         image: nginx:1.25.4-alpine
         depends_on:
             - wordpress
+            - app
         restart: unless-stopped
         volumes:
             - ./config/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
             - ./config/nginx/snippets:/etc/nginx/snippets
-            - wordpress:/var/www/html
-            - phpmyadmin:/var/www/html/phpmyadmin
+            - wordpress:/var/www/html/@/wordpress
+            - phpmyadmin:/var/www/html/@/phpmyadmin
         env_file:
             - .env
         environment:

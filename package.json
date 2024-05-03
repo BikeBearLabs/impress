@@ -1,27 +1,57 @@
 {
 	"type": "module",
 	"scripts": {
-		"dev": "docker compose up --build -d && vite dev && docker compose down",
-		"build": "docker compose up --build -d && vite build && docker compose down",
-		"test": "vitest"
+		"dev": "npm run up && next dev && npm run down",
+		"build": "npm run prebuild && next build && npm run postbuild",
+		"up": "docker compose up --build -d",
+		"down": "docker compose down",
+		"prebuild": "node tools/build/prebuild.js",
+		"postbuild": "node tools/build/postbuild.js"
 	},
 	"license": "MIT",
 	"devDependencies": {
+		"@stylistic/stylelint-plugin": "^2.1.2",
+		"@types/eslint": "^8.56.10",
+		"@types/postcss-import": "^14.0.3",
+		"@types/react": "^18.3.1",
+		"@types/react-dom": "^18.3.0",
 		"@typescript-eslint/eslint-plugin": "^7.5.0",
 		"@typescript-eslint/parser": "^7.5.0",
+		"autoprefixer": "^10.4.19",
+		"clang-format": "^1.8.0",
+		"cssnano": "^7.0.1",
 		"eslint": "^8.57.0",
+		"eslint-config-next": "^14.2.3",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-config-xo": "^0.44.0",
 		"eslint-config-xo-typescript": "^4.0.0",
 		"eslint-plugin-only-warn": "^1.1.0",
 		"eslint-plugin-prettier": "^5.1.3",
+		"patch-package": "^8.0.0",
+		"postcss": "^8.4.38",
+		"postcss-class-apply": "^4.0.1",
+		"postcss-import": "^16.1.0",
+		"postcss-import-url": "^7.2.0",
+		"postcss-load-config": "^5.1.0",
 		"prettier": "^3.2.5",
+		"prettier-plugin-classnames": "^0.6.6",
 		"prettier-plugin-jsdoc": "^1.3.0",
+		"prettier-plugin-merge": "^0.6.0",
+		"prettier-plugin-tailwindcss": "^0.5.14",
+		"stylelint": "^16.4.0",
+		"stylelint-config-standard": "^36.0.0",
+		"tailwindcss": "^3.4.3",
 		"ts-node": "^10.9.2",
-		"typescript": "5.4",
+		"typescript": "^5.4.5",
 		"vite": "^5.2.8",
 		"vitest": "^1.4.0"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@t3-oss/env-nextjs": "^0.10.1",
+		"next": "^14.2.3",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"sharp": "^0.33.3",
+		"zod": "^3.23.5"
+	}
 }
-

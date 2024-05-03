@@ -2,29 +2,72 @@ server {
 	listen 80;
 	listen [::]:80;
 
-	root /var/www/html;
-	index index.php;
-
 	# allow larger file uploads
 	client_max_body_size 64M;
 
-	location / {
-		try_files $uri $uri/ /index.php?$args;
+	# hack to enable dynamic dispatching below
+	# by declaring all of our service hosts
+	location @wordpress {
+		fastcgi_pass wordpress:9000;
 	}
-
-	location ~ ^/phpmyadmin(.+\.php)$ {
-		alias /var/www/html;
-		index index.php;
-		include fastcgi_params;
-		include snippets/fastcgi-php.conf;
-		# rewrite /phpmyadmin/$1 -> /$1
-		fastcgi_param SCRIPT_FILENAME $document_root$1;
+	location @phpmyadmin {
 		fastcgi_pass phpmyadmin:9000;
 	}
 
-	location ~ \.php$ {
-		include fastcgi_params;
-		include snippets/fastcgi-php.conf;
-		fastcgi_pass wordpress:9000;
+	# rewrite routes that start with `wp-` to /@/wordpress/*
+	location ~ ^/(?<wp_category>wp-\w+)/?(?<path>$|.*$) {
+		# /@/$service -> /@/$service/index.php
+		location ~ ^/[^/.]+$ {
+			return 308 https://$host$uri/;
+		}
+		location ~ ^ {
+			rewrite ^ /@/wordpress/$wp_category/$path last;
+		}
+	}
+
+	# handle service (/@/*) requests with dynamic dispatching
+	location ~ ^/@/(?<service>wordpress|phpmyadmin)/?(?<path>$|.*$) {
+		# /@/$service -> /@/$service/index.php
+		location ~ ^/@/[^/.]+$ {
+			return 308 https://$host$uri/;
+		}
+		location ~ ^/@/[^/.]+/$ {
+			rewrite ^ $uri/index.php last;
+		}
+
+		# /@/wordpress/wp-admin -> /@/wordpress/wp-admin/index.php
+		location ~ ^/@/wordpress/(?<wp_category>wp-\w+)$ {
+			return 308 https://$host$uri/;
+		}
+		location ~ ^/@/wordpress/(?<wp_category>wp-\w+)/$ {
+			rewrite ^ $uri/index.php last;
+		}
+
+		# php files for fpm/fastcgi
+		location ~ \.php$ {
+			root /var/www/html;
+			rewrite ^ /$path break;
+			include fastcgi_params;
+			fastcgi_split_path_info ^(.+\.php)(/.+)$;
+			fastcgi_index index.php;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_param PATH_INFO $fastcgi_path_info;
+			fastcgi_pass $service:9000;
+		}
+
+		# asset files for nginx
+		location ~ ^ {
+			root /var/www/html;
+			rewrite ^ /@/$service/$path break;
+			try_files $uri =404;
+		}
+	}
+
+	# handle app requests
+	location ~ ^ {
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $host;
+		proxy_pass http://app:3000;
+		proxy_http_version 1.1;
 	}
 }
