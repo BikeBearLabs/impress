@@ -9,7 +9,8 @@
 		"**/*.config.*",
 		"**/.*rc.*",
 		".next/types/**/*.ts",
-		"next-env.d.ts"
+		"next-env.d.ts",
+		"wp-content/acf-json/**/*"
 	],
 	"exclude": ["node_modules", "dist"],
 	"compilerOptions": {
