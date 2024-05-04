@@ -1,4 +1,6 @@
 import type { Config } from 'tailwindcss';
+import type plugin from 'tailwindcss/plugin';
+import tailwindPluginHeadlessUi from '@headlessui/tailwindcss';
 import { tailwindPluginGridAutoFit } from './tools/tailwind/plugins/tailwindPluginGridAutoFit';
 import { tailwindPluginRadialGradient } from './tools/tailwind/plugins/tailwindPluginRadialGradient';
 import { tailwindPluginSpacingDyn } from './tools/tailwind/plugins/tailwindPluginSpacingDyn';
@@ -11,6 +13,7 @@ export default {
 	content: ['./src/**/*.{html,?(m|c)?(j|t)s?(x)}'],
 	safelist: ['dark'],
 	plugins: [
+		tailwindPluginHeadlessUi({}) as ReturnType<typeof plugin>,
 		tailwindPluginGridAutoFit,
 		tailwindPluginRadialGradient,
 		tailwindPluginSpacingDyn,
