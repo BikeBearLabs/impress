@@ -100,13 +100,12 @@ const rulesCommon = {
 			leadingUnderscore: 'forbid',
 			trailingUnderscore: 'forbid',
 			filter: {
-				regex: '(^\\d)|[^\\w$]',
+				regex: '(^\\d)|[^\\w$]|^(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)$',
 				match: false,
 			},
 		},
 		{
 			selector: [
-				'function',
 				'parameterProperty',
 				'classMethod',
 				'objectLiteralMethod',
@@ -151,6 +150,11 @@ const rulesCommon = {
 	],
 	'capitalized-comments': 'off',
 	'@typescript-eslint/no-redeclare': 'off', // not recommended for new projects any more
+	'no-empty-pattern': 'off',
+
+	// nestjs mods
+	// allow img elements for wp-content stuff
+	'@next/next/no-img-element': 'off',
 };
 const rulesTs = { ...rulesCommon };
 const rulesJs = {
