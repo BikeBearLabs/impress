@@ -7,32 +7,37 @@ server {
 
 	# hack to enable dynamic dispatching below
 	# by declaring all of our service hosts
-	location @wordpress {
+	location !wordpress {
 		fastcgi_pass wordpress:9000;
 	}
-	location @phpmyadmin {
+	location !phpmyadmin {
 		fastcgi_pass phpmyadmin:9000;
+	}
+
+	# hack in any wordpress usages of index.php
+	location ~ ^/index.php$ {
+		rewrite ^ /!/wordpress/index.php last;
 	}
 
 	# hack in pretty permalinks for wp rest api
 	location ~ ^/wp-json(?<rest_route>.*)$ {
-		rewrite ^|$ /@/wordpress/?rest_route=$rest_route last;
+		rewrite ^|$ /!/wordpress/?rest_route=$rest_route last;
 	}
 
-	# rewrite routes that start with `wp-` to /@/wordpress/*
+	# rewrite routes that start with `wp-` to /!/wordpress/*
 	location ~ ^/wp-.+ {
-		# /@/$service -> /@/$service/index.php
+		# /!/$service -> /!/$service/index.php
 		location ~ /[^/.]+$ {
 			return 308 https://$host$uri/;
 		}
 		location ~ ^ {
-			rewrite ^ /@/wordpress$uri last;
+			rewrite ^ /!/wordpress$uri last;
 		}
 	}
 
-	# handle service (/@/*) requests with dynamic dispatching
-	location ~ ^/@/(?<service>wordpress|phpmyadmin)/?(?<path>$|.*$) {
-		# /@/$service -> /@/$service/index.php
+	# handle service (/!/*) requests with dynamic dispatching
+	location ~ ^/!/(?<service>wordpress|phpmyadmin)/?(?<path>$|.*$) {
+		# /!/$service -> /!/$service/index.php
 		location ~ /[^./]+$ {
 			return 308 https://$host$uri/;
 		}
@@ -55,7 +60,7 @@ server {
 		# asset files for nginx
 		location ~ ^ {
 			root /var/www/html;
-			rewrite ^ /@/$service/$path break;
+			rewrite ^ /!/$service/$path break;
 			try_files $uri =404;
 		}
 	}

@@ -69,9 +69,9 @@ services:
         volumes:
             - ./config/nginx/default.conf.template:/etc/nginx/templates/default.conf.template
             - ./config/nginx/snippets:/etc/nginx/snippets
-            - wordpress:/var/www/html/@/wordpress
-            - ./wp-content:/var/www/html/@/wordpress/wp-content
-            - phpmyadmin:/var/www/html/@/phpmyadmin
+            - wordpress:/var/www/html/!/wordpress
+            - ./wp-content:/var/www/html/!/wordpress/wp-content
+            - phpmyadmin:/var/www/html/!/phpmyadmin
         env_file:
             - .env
         environment:
