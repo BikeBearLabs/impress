@@ -29,42 +29,16 @@ export default {
 		extend: {
 			colors: {
 				border: 'hsl(var(--border) / <alpha-value>)',
-				input: 'hsl(var(--input) / <alpha-value>)',
-				ring: 'hsl(var(--ring) / <alpha-value>)',
-				background: 'hsl(var(--background) / <alpha-value>)',
-				foreground: 'hsl(var(--foreground) / <alpha-value>)',
-				primary: {
-					DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-					foreground:
-						'hsl(var(--primary-foreground) / <alpha-value>)',
-				},
-				secondary: {
-					DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
-					foreground:
-						'hsl(var(--secondary-foreground) / <alpha-value>)',
-				},
-				destructive: {
-					DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
-					foreground:
-						'hsl(var(--destructive-foreground) / <alpha-value>)',
-				},
-				muted: {
-					DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
-					foreground: 'hsl(var(--muted-foreground) / <alpha-value>)',
-				},
-				accent: {
-					DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
-					foreground: 'hsl(var(--accent-foreground) / <alpha-value>)',
-				},
-				popover: {
-					DEFAULT: 'hsl(var(--popover) / <alpha-value>)',
-					foreground:
-						'hsl(var(--popover-foreground) / <alpha-value>)',
-				},
-				card: {
-					DEFAULT: 'hsl(var(--card) / <alpha-value>)',
-					foreground: 'hsl(var(--card-foreground) / <alpha-value>)',
-				},
+				'bg-1': 'hsl(var(--bg-1) / <alpha-value>)',
+				'bg-2': 'hsl(var(--bg-2) / <alpha-value>)',
+				'bg-3': 'hsl(var(--bg-3) / <alpha-value>)',
+				'fg-1': 'hsl(var(--fg-1) / <alpha-value>)',
+				'fg-2': 'hsl(var(--fg-2) / <alpha-value>)',
+				'fg-3': 'hsl(var(--fg-3) / <alpha-value>)',
+				'accent-1': 'hsl(var(--accent-1) / <alpha-value>)',
+				'accent-2': 'hsl(var(--accent-2) / <alpha-value>)',
+				'accent-3': 'hsl(var(--accent-3) / <alpha-value>)',
+				overlay: 'hsl(var(--overlay) / <alpha-value>)',
 			},
 			borderRadius: {
 				'4xl': 'calc(var(--radius) * 8)',

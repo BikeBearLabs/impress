@@ -1,11 +1,6 @@
-import '@/styles/globals.css';
-
-import { Inter } from 'next/font/google';
-
-const inter = Inter({
-	subsets: ['latin'],
-	variable: '--font-sans',
-});
+import '@/theme/globals.css';
+import { display, mono, sans } from '@/theme/typography';
+import { type PropsWithChildren } from 'react';
 
 export const metadata = {
 	title: 'Site',
@@ -13,14 +8,14 @@ export const metadata = {
 	icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 
-export default function RootLayout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: PropsWithChildren<{}>) {
 	return (
 		<html lang='en'>
-			<body className={`font-sans ${inter.variable}`}>{children}</body>
+			<body
+				className={`font-sans ${sans.variable} ${display.variable} ${mono.variable}`}
+			>
+				{children}
+			</body>
 		</html>
 	);
 }

@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		/* fonts */
+		--font-display: sans-serif;
+		--font-sans: sans-serif;
+		--font-mono: monospace;
+
+		/* layout */
+		--radius: 14px;
+
+		/* colors */
+		--bg-1: 214 22% 87%;
+		--bg-2: 214 32% 91%;
+		--bg-3: 210 40% 96%;
+		--accent-1: 356 65% 70%;
+		--accent-2: 356 100% 52%;
+		--accent-3: 356 100% 32%;
+		--fg-1: 221 39% 11%;
+		--fg-2: 217 9% 41%;
+		--fg-3: 215 28% 5%;
+		--overlay: 0 0% 0%;
+
+		&.dark {
+			--bg-1: 240 4% 5%;
+			--bg-2: 240 4% 10%;
+			--bg-3: 240 4% 14%;
+			--accent-1: 356 100% 82%;
+			--accent-2: 356 100% 72%;
+			--accent-3: 356 100% 66%;
+			--fg-1: 210 40% 96%;
+			--fg-2: 214 3% 44%;
+			--fg-3: 214 3% 20%;
+			--overlay: 0 0% 0%;
+		}
+	}
+}
