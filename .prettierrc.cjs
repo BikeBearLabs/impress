@@ -6,5 +6,10 @@ module.exports = {
 	jsxSingleQuote: true,
 	endOfLine: 'lf',
 	singleAttributePerLine: true,
-	plugins: ['prettier-plugin-jsdoc'],
+	plugins: [
+		'prettier-plugin-jsdoc',
+		'prettier-plugin-tailwindcss',
+		'prettier-plugin-classnames',
+		'prettier-plugin-merge',
+	],
 };
