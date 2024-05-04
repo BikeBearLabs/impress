@@ -1,3 +1,4 @@
+import './accept-any-tls-during-development';
 import type { WP_REST_API_Page } from 'wp-types';
 
 /**
@@ -13,9 +14,6 @@ import type { WP_REST_API_Page } from 'wp-types';
  */
 export async function getPageBySlug<T extends {}>(slug: string) {
 	'use server';
-
-	if (process.env.NODE_ENV === 'development')
-		process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 	try {
 		const resp = await fetch(
