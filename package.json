@@ -6,7 +6,8 @@
 		"up": "docker compose up --build -d",
 		"down": "docker compose down",
 		"prebuild": "node tools/build/prebuild.js",
-		"postbuild": "node tools/build/postbuild.js"
+		"postbuild": "node tools/build/postbuild.js",
+		"postinstall": "patch-package"
 	},
 	"license": "MIT",
 	"devDependencies": {
