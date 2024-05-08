@@ -151,10 +151,21 @@ const rulesCommon = {
 	'capitalized-comments': 'off',
 	'@typescript-eslint/no-redeclare': 'off', // not recommended for new projects any more
 	'no-empty-pattern': 'off',
+	'func-names': 'off',
 
 	// nestjs mods
 	// allow img elements for wp-content stuff
 	'@next/next/no-img-element': 'off',
+	'jsx-a11y/alt-text': [
+		'error',
+		{
+			elements: ['img', 'object', 'area', 'input[type="image"]'],
+			img: [],
+			object: [],
+			area: [],
+			'input[type="image"]': [],
+		},
+	],
 };
 const rulesTs = { ...rulesCommon };
 const rulesJs = {
