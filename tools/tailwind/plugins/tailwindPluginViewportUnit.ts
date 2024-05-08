@@ -80,7 +80,15 @@ export const tailwindPluginViewportUnit = plugin(
 			top: ['top'],
 			right: ['right'],
 			bottom: ['bottom'],
+			gap: ['gap'],
+			'gap-x': ['column-gap'],
+			'gap-y': ['row-gap'],
+			'grid-cols': ['grid-template-columns'],
+			'grid-rows': ['grid-template-rows'],
+			text: ['font-size'],
+			m: ['margin'],
 			...getAxisWithModifiers('m', 'margin'),
+			p: ['padding'],
 			...getAxisWithModifiers('p', 'padding'),
 		} as const;
 		const axisKeyAndCssProp = Object.entries(axisKeyToCssProp);
