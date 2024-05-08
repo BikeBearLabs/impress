@@ -51,8 +51,16 @@
 		"*.pcss": "tailwindcss"
 	},
 	"tailwindCSS.experimental.classRegex": [
-		"tw`([^`]*)", // tw`...`
-		"class?\\s*=\\s*\"([^\"]*)" // class="..."
+		// tw`...`
+		"tw`([^`]*)",
+		// clsx(...)
+		// https://github.com/paolotiu/tailwind-intellisense-regex-list?tab=readme-ov-file#clsx
+		["clsx\\(.*?\\)(?!\\])", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+		// headless ui
+		// https://github.com/paolotiu/tailwind-intellisense-regex-list?tab=readme-ov-file#headlessui-transition-react
+		"(?:enter|leave)(?:From|To)?=\\s*(?:\"|'|{`)([^(?:\"|'|`})]*)",
+		// class="..."
+		"class?\\s*=\\s*\"([^\"]*)"
 	],
 	"clang-format.executable": "${workspaceRoot}/node_modules/.bin/clang-format",
 	"intelephense.format.braces": "k&r",
