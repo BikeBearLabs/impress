@@ -8,7 +8,11 @@ async function cpIfExists(
 	/** @type {string} */ source,
 	/** @type {string} */ destination,
 ) {
-	if (!(await fs.stat(source))) return;
+	try {
+		await fs.access(source);
+	} catch {
+		return;
+	}
 
 	fs.cp(source, destination, { recursive: true });
 }
