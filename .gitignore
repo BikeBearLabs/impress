@@ -9,3 +9,4 @@ dist/
 wp-content/plugins/akismet/
 wp-content/plugins/hello.php
 wp-content/themes/twenty*/
+wp-content/mu-plugins/wp-rest-cache.php
