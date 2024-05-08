@@ -1,23 +1,25 @@
-import './accept-any-tls-during-development';
+'use server';
+
 import type { WP_REST_API_Post } from 'wp-types';
 
 /**
- * Returns the first post that matches {@linkcode slug}
+ * Returns the first item that matches {@linkcode slug}
  *
  * @example
  * 	import type { Home } from '!/acf';
  *
  * 	function getHomePostFields(): Home | undefined {
- * 		const data = await getPostBySlug<{ acf: Home }>('home');
+ * 		const data = await getBySlug<{ acf: Home }>('pages', 'home');
  * 		return data?.acf;
  * 	}
  */
-export async function getPostBySlug<T extends {}>(slug: string) {
-	'use server';
-
+export async function getBySlug<T extends {}>(
+	type: 'posts' | 'pages' | (string & {}),
+	slug: string,
+) {
 	try {
 		const resp = await fetch(
-			`https://localhost/wp-json/wp/v2/posts?slug=${slug}`,
+			`https://localhost/wp-json/wp/v2/${type}?slug=${slug}&acf_format=standard`,
 		);
 
 		if (!resp.ok)

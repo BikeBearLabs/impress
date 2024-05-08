@@ -16,7 +16,7 @@ export const env = createEnv({
 	 * the client, prefix them with `NEXT_PUBLIC_`.
 	 */
 	client: {
-		// NEXT_PUBLIC_CLIENTVAR: z.string(),
+		NEXT_PUBLIC_WORDPRESS_COMPONENTS_USE_RELATIVE_URL: z.enum(['0', '1']),
 	},
 
 	/**
@@ -26,8 +26,11 @@ export const env = createEnv({
 	 */
 	runtimeEnv: {
 		NODE_ENV: process.env.NODE_ENV,
+		NEXT_PUBLIC_WORDPRESS_COMPONENTS_USE_RELATIVE_URL:
+			process.env['NEXT_PUBLIC_WORDPRESS_COMPONENTS_USE_RELATIVE_URL'],
 		// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 	},
+
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
 	 * This is especially useful for Docker builds.

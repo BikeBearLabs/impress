@@ -3,3 +3,5 @@ jank
 pcss
 lerp
 linkcode
+navs
+epyt
