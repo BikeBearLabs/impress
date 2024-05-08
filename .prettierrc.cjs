@@ -12,4 +12,6 @@ module.exports = {
 		'prettier-plugin-classnames',
 		'prettier-plugin-merge',
 	],
+	tailwindFunctions: ['clsx', 'tw'],
+	customFunctions: ['clsx', 'tw'],
 };
