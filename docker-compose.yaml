@@ -1,22 +1,6 @@
 services:
-    db:
-        image: mariadb:11.3.2
-        ports:
-            - 3306:3306
-        restart: unless-stopped
-        volumes:
-            - ./.db:/var/lib/mysql
-        env_file:
-            - .env
-        environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: wordpress
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     wordpress:
         image: wordpress:6.5.0-php8.3-fpm-alpine
-        depends_on:
-            - db
         restart: unless-stopped
         volumes:
             - ./config/php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
@@ -26,10 +10,6 @@ services:
         env_file:
             - .env
         environment:
-            WORDPRESS_DB_HOST: db
-            WORDPRESS_DB_NAME: wordpress
-            WORDPRESS_DB_USER: ${MYSQL_USER}
-            WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
             WORDPRESS_CONFIG_EXTRA: |
                 define('CORE_UPGRADE_SKIP_NEW_BUNDLED' , true);
                 define('WP_DEFAULT_THEME', 'blank-canvas-3');
@@ -57,18 +37,6 @@ services:
                 fi
                 node dist/server.js
             "
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin:5.2.1-fpm-alpine
-        depends_on:
-            - db
-        restart: unless-stopped
-        volumes:
-            - phpmyadmin:/var/www/html
-        env_file:
-            - .env
-        environment:
-            PMA_HOST: db
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     webserver:
         image: nginx:1.25.4-alpine
         depends_on:

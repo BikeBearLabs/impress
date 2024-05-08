@@ -10,9 +10,10 @@ server {
 	location !wordpress {
 		fastcgi_pass wordpress:9000;
 	}
-	location !phpmyadmin {
-		fastcgi_pass phpmyadmin:9000;
-	}
+	# add new services here:
+	# location !phpmyadmin {
+	# 	fastcgi_pass phpmyadmin:9000;
+	# }
 
 	# hack in any wordpress usages of index.php
 	location ~ ^/index.php$ {
@@ -36,7 +37,8 @@ server {
 	}
 
 	# handle service (/!/*) requests with dynamic dispatching
-	location ~ ^/!/(?<service>wordpress|phpmyadmin)/?(?<path>$|.*$) {
+	# add new services here -----------↓ e.g. |phpmyadmin
+	location ~ ^/!/(?<service>wordpress)/?(?<path>$|.*$) {
 		# /!/$service -> /!/$service/index.php
 		location ~ /[^./]+$ {
 			return 308 https://$host$uri/;
