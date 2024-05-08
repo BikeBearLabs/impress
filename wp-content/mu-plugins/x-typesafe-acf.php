@@ -63,6 +63,69 @@ function get_type_for_field(array $field) {
 			}
 			$type .= "}";
 			break;
+		case "repeater":
+			$type .= "{\n";
+			foreach ($field['sub_fields'] as $sub_field) {
+				$type .= "\t" . get_identifier_to_type_mapping($sub_field) . ";\n";
+			}
+			$type .= "}[]";
+			break;
+		case "image":
+			if ($field['return_format'] === 'url')
+				$type .= "string";
+			else if ($field['return_format'] === 'id')
+				$type .= "`\${number}`";
+			else {
+				$type .= "{\n";
+				$type .= "\ttype: 'image';\n";
+				$type .= "\tid: string;\n";
+				$type .= "\turl: string;\n";
+				$type .= "\tname: string;\n";
+				$type .= "\tstatus: string;\n";
+				$type .= "\tuploaded_to: number;\n";
+				$type .= "\tdate: string;\n";
+				$type .= "\tmodified: string;\n";
+				$type .= "\tmenu_order: 0;\n";
+				$type .= "\talt: string;\n";
+				$type .= "\tfilename: string;\n";
+				$type .= "\ttitle: string;\n";
+				$type .= "\tauthor: `\${number}`;\n";
+				$type .= "\tdescription: `\${number}`;\n";
+				$type .= "\tcaption: string;\n";
+				$type .= "\tmime_type: string;\n";
+				$type .= "\tsub_type: string;\n";
+				$type .= "\ticon: string;\n";
+				$type .= "\twidth: number;\n";
+				$type .= "\theight: number;\n";
+				$type .= "\tsizes: {\n";
+				$type .= "\t\tthumbnail: string;\n";
+				$type .= "\t\t['thumbnail-height']: number;\n";
+				$type .= "\t\t['thumbnail-width']: number;\n";
+				$type .= "\t\tmedium: string;\n";
+				$type .= "\t\t['medium-height']: number;\n";
+				$type .= "\t\t['medium-width']: number;\n";
+				$type .= "\t\tmedium_large: string;\n";
+				$type .= "\t\t['medium_large-height']: number;\n";
+				$type .= "\t\t['medium_large-width']: number;\n";
+				$type .= "\t\tlarge: string;\n";
+				$type .= "\t\t['large-height']: number;\n";
+				$type .= "\t\t['large-width']: number;\n";
+				$type .= "\t} & Record<string, string> &\n";
+				$type .= "\t\tRecord<`\${string}-\${'width' | 'height'}`, number>;\n";
+				$type .= "}";
+			}
+			break;
+		case "link":
+			if ($field['return_format'] === 'url')
+				$type .= "string";
+			else {
+				$type .= "{\n";
+				$type .= "\turl: string;\n";
+				$type .= "\ttitle: string;\n";
+				$type .= "\ttarget: string;\n";
+				$type .= "}";
+			}
+			break;
 		default:
 			$type .= "string";
 	}
