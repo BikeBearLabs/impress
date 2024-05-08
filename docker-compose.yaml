@@ -41,13 +41,22 @@ services:
         restart: unless-stopped
         working_dir: /home/node/app
         volumes:
-            - ./dist:/home/node/app/dist
+            - .:/home/node/app/
         environment:
             NODE_ENV: production
         env_file:
             - .env
         init: true
-        command: node dist/server.js
+        command: |
+            sh -c "
+                if [ ! -d node_modules ]; then
+                    npm install
+                fi
+                if [ ! -f dist/server.js ]; then
+                    npm run build
+                fi
+                node dist/server.js
+            "
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:5.2.1-fpm-alpine
         depends_on:
