@@ -14,5 +14,5 @@ async function cpIfExists(
 		return;
 	}
 
-	fs.cp(source, destination, { recursive: true });
+	fs.cp(source, destination, { recursive: true, force: true });
 }
