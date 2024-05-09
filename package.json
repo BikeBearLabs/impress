@@ -1,8 +1,8 @@
 {
 	"type": "module",
 	"scripts": {
-		"dev": "docker compose up -d && next dev & npm run down",
-		"build": "npm run prebuild && next build & npm run postbuild",
+		"dev": "docker compose up -d && next dev && npm run down",
+		"build": "npm run prebuild && next build && npm run postbuild",
 		"up": "docker compose up --build -d",
 		"down": "docker compose down",
 		"prebuild": "node tools/build/prebuild.js",
