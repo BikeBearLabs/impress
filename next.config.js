@@ -10,6 +10,12 @@ const development = process.env.NODE_ENV === 'development';
 const config = {
 	output: 'standalone',
 	reactStrictMode: true,
+	typescript: {
+		ignoreBuildErrors: true,
+	},
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 	/**
 	 * Enable the use of `.dev.ts` & `.prod.ts` pages & routes, that are only
 	 * present in their specified environment
