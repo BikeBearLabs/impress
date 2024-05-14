@@ -5,16 +5,6 @@ server {
 	# allow larger file uploads
 	client_max_body_size 64M;
 
-	# hack to enable dynamic dispatching below
-	# by declaring all of our service hosts
-	location !wordpress {
-		fastcgi_pass wordpress:9000;
-	}
-	# add new services here:
-	# location !phpmyadmin {
-	# 	fastcgi_pass phpmyadmin:9000;
-	# }
-
 	# hack in any wordpress usages of index.php
 	location ~ ^/index.php$ {
 		rewrite ^ /!/wordpress/index.php last;
@@ -49,6 +39,7 @@ server {
 
 		# php files for fpm/fastcgi
 		location ~ \.php$ {
+			resolver 127.0.0.11;
 			root /var/www/html;
 			rewrite ^ /$path break;
 			include fastcgi_params;
@@ -69,6 +60,7 @@ server {
 
 	# handle app requests
 	location ~ ^ {
+		resolver 127.0.0.11;
 		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 		proxy_set_header Host $host;
 		proxy_pass http://app:3000;

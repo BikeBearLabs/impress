@@ -110,11 +110,21 @@ define('WP_DEBUG', !!getenv_docker('WORDPRESS_DEBUG', ''));
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-// If we're behind a proxy server and using HTTPS, we need to alert WordPress of that fact
-// see also https://wordpress.org/support/article/administration-over-ssl/#using-a-reverse-proxy
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false) {
-	$_SERVER['HTTPS'] = 'on';
-}
+// define WP_HOME and WP_SITEURL based on the host
+// (see https://codex.wordpress.org/Editing_wp-config.php#WP_HOME)
+define('WP_SITEURL', 'https://' . $_SERVER['HTTP_HOST']);
+define('WP_HOME', 'https://' . $_SERVER['HTTP_HOST']);
+
+// declare that we're already on https, no need to redirect
+define('FORCE_SSL_ADMIN', false);
+$_SERVER['HTTPS'] = 'on';
+
+// don't include default content when updating
+define('CORE_UPGRADE_SKIP_NEW_BUNDLED', true);
+
+// set the default theme
+define('WP_DEFAULT_THEME', 'blank-canvas-3');
+
 // (we include this by default because reverse proxying is extremely common in container environments)
 
 if ($configExtra = getenv_docker('WORDPRESS_CONFIG_EXTRA', '')) {

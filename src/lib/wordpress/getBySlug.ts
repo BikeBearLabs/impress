@@ -1,5 +1,6 @@
 'use server';
 
+import { env } from '@/env';
 import type { WP_REST_API_Post } from 'wp-types';
 
 /**
@@ -19,7 +20,7 @@ export async function getBySlug<T extends {}>(
 ) {
 	try {
 		const resp = await fetch(
-			`https://localhost/wp-json/wp/v2/${type}?slug=${slug}&acf_format=standard`,
+			`https://${String(env.SITE_INTRA_HOST) || 'localhost'}/wp-json/wp/v2/${type}?slug=${slug}&acf_format=standard`,
 		);
 
 		if (!resp.ok)

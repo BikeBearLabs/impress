@@ -8,6 +8,14 @@ export const env = createEnv({
 	 */
 	server: {
 		NODE_ENV: z.enum(['development', 'test', 'production']),
+		SITE_DOMAIN: z
+			.string()
+			.regex(
+				/^(?!http[s]?:\/\/).*/,
+				'Domain should not start with protocol (http:// or https://)',
+			)
+			.regex(/.*(?<!\/)$/, 'Domain should not end with a slash'),
+		SITE_INTRA_HOST: z.string().optional(),
 	},
 
 	/**
@@ -26,6 +34,8 @@ export const env = createEnv({
 	 */
 	runtimeEnv: {
 		NODE_ENV: process.env.NODE_ENV,
+		SITE_DOMAIN: process.env['SITE_DOMAIN'],
+		SITE_INTRA_HOST: process.env['SITE_INTRA_HOST'],
 		NEXT_PUBLIC_WORDPRESS_COMPONENTS_USE_RELATIVE_URL:
 			process.env['NEXT_PUBLIC_WORDPRESS_COMPONENTS_USE_RELATIVE_URL'],
 		// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,

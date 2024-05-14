@@ -9,12 +9,10 @@ services:
             - ./wp-content:/var/www/html/wp-content
         env_file:
             - .env
-        environment:
-            WORDPRESS_CONFIG_EXTRA: |
-                define('CORE_UPGRADE_SKIP_NEW_BUNDLED' , true);
-                define('WP_DEFAULT_THEME', 'blank-canvas-3');
+        networks:
+            private:
     app:
-        image: node:22.0.0-alpine
+        image: node:22.1.0-alpine
         user: node
         depends_on:
             - wordpress
@@ -24,6 +22,7 @@ services:
             - .:/home/node/app/
         environment:
             NODE_ENV: production
+            SITE_INTRA_HOST: web
         env_file:
             - .env
         init: true
@@ -37,7 +36,9 @@ services:
                 fi
                 node dist/server.js
             "
-    webserver:
+        networks:
+            private:
+    web:
         image: nginx:1.25.4-alpine
         depends_on:
             - wordpress
@@ -48,31 +49,24 @@ services:
             - ./config/nginx/snippets:/etc/nginx/snippets
             - wordpress:/var/www/html/!/wordpress
             - ./wp-content:/var/www/html/!/wordpress/wp-content
-            - phpmyadmin:/var/www/html/!/phpmyadmin
         env_file:
             - .env
         environment:
             ERROR_LOG: stdout
             ACCESS_LOG: stderr
-    ssl:
-        image: steveltn/https-portal:1.23.1
-        depends_on:
-            - webserver
-        ports:
-            - 80:80
-            - 443:443
-        restart: unless-stopped
-        volumes:
-            - ./.ssl:/var/lib/https-portal
-        env_file:
-            - .env
-        environment:
-            # DOMAINS: 'example.com -> http://webserver:80 #production'
-            # DOMAINS: 'staging.example.com -> http://webserver:80 #staging'
-            DOMAINS: 'localhost -> http://webserver:80 #local'
-            # allow larger file uploads
-            CLIENT_MAX_BODY_SIZE: 64M
+            VIRTUAL_HOST: ${SITE_DOMAIN}
+        networks:
+            private:
+            public:
+                aliases:
+                    - ${SITE_DOMAIN}.repress
 
 volumes:
-    phpmyadmin:
     wordpress:
+
+networks:
+    private:
+        driver: bridge
+    public:
+        name: repress
+        external: true
