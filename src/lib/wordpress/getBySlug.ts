@@ -20,7 +20,7 @@ export async function getBySlug<T extends {}>(
 ) {
 	try {
 		const resp = await fetch(
-			`https://${String(env.SITE_INTRA_HOST) || 'localhost'}/wp-json/wp/v2/${type}?slug=${slug}&acf_format=standard`,
+			`http://${String(env.SITE_INTRA_HOST) || 'localhost'}/wp-json/wp/v2/${type}?slug=${slug}&acf_format=standard`,
 		);
 
 		if (!resp.ok)
