@@ -21,6 +21,9 @@ export async function getBySlug<T extends {}>(
 	try {
 		const resp = await fetch(
 			`http://${String(env.SITE_INTRA_HOST) || 'localhost'}/wp-json/wp/v2/${type}?slug=${slug}&acf_format=standard`,
+			{
+				cache: 'no-store',
+			},
 		);
 
 		if (!resp.ok)
