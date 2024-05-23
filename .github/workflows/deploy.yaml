@@ -1,0 +1,115 @@
+name: Deploy using SSH to Server
+
+on: [push, workflow_dispatch]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        if: ${{ vars.REMOTE_HOST != '' && vars.REMOTE_USER != '' }}
+
+        concurrency:
+            group:
+                # only ever run one deploy job at a time
+                ${{ github.workflow }}
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup caching for Docker
+              uses: ScribeMD/docker-cache@0.5.0
+              with:
+                  key: docker-${{ runner.os }}-${{ hashFiles('docker-compose.yaml') }}
+
+            - name: Setup caching for NextJS
+              uses: actions/cache@v4
+              with:
+                  # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
+                  path: |
+                      ~/.npm
+                      ${{ github.workspace }}/.next/cache
+                  # Generate a new cache whenever packages or source files change.
+                  key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+                  # If source files changed but packages didn't, rebuild from a prior cache.
+                  restore-keys: |
+                      ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+            - name: Install Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 22.x
+                  cache: npm
+
+            - name: Install REPRESS
+              run: |
+                  pushd ..
+                  git clone https://@github.com/BikeBearLabs/repress.git
+                  cd repress
+                  cp -n .env.example .env
+                  export STAGE=local
+                  docker compose up -d --build
+                  popd
+
+            - name: Install npm dependencies
+              run: npm i
+
+            - name: Start Docker Compose
+              run: |
+                  cp -n .env.example .env
+                  export NODE_TLS_REJECT_UNAUTHORIZED=0
+                  export SITE_DOMAIN=localhost
+                  docker compose up -d --build
+
+            - name: Run build task
+              run: npm run build
+
+            - name: Stop Docker Compose
+              run: |
+                  docker compose down
+                  pushd ../repress
+                  docker compose down
+                  popd
+
+            - # https://github.com/marketplace/actions/ssh-deploy
+              name: Deploy to server using SSH
+              uses: easingthemes/ssh-deploy@main
+              with:
+                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                  ARGS: -rlgoDzc --stats -i --delete
+                  SOURCE: /
+                  TARGET: ~/${{ github.event.repository.name }}
+                  REMOTE_HOST: ${{ vars.REMOTE_HOST }}
+                  REMOTE_USER: ${{ vars.REMOTE_USER }}
+                  EXCLUDE: /node_modules/
+                  SCRIPT_BEFORE: |
+                      cd ~/
+
+                      # stop the app
+                      if [ -d "${{ github.event.repository.name }}" ]; then
+                          pushd ${{ github.event.repository.name }}
+                          docker compose down
+                          popd
+                      fi
+
+                      # ensure repress is installed next to the app & up to date
+                      if [ -d "repress" ]; then
+                          pushd repress
+                          docker compose down
+                          git fetch
+                          git pull
+                          export STAGE=production
+                          docker compose up -d --build
+                          popd
+                      else
+                          git clone https://@github.com/BikeBearLabs/repress.git
+                          pushd repress
+                          cp -n .env.example .env
+                          export STAGE=production
+                          docker compose up -d --build
+                          popd
+                      fi
+                  SCRIPT_AFTER: |
+                      cd ~/${{ github.event.repository.name }}
+                      cp -n .env.example .env
+                      export SITE_DOMAIN=${{ vars.REMOTE_HOST }}
+                      docker compose up -d --build
